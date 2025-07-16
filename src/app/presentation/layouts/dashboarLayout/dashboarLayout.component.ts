@@ -3,6 +3,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { SideBarMenuItemComponent } from '../../components/sideBarMenuItem/sideBarMenuItem.component';
 import { routes } from '../../../app.routes';
+import { ChatMessageComponent } from '../../components/chats-bubbles/chatMessage/chatMessage.component';
 
 @Component({
   selector: 'app-dashboar-layout',
@@ -11,6 +12,7 @@ import { routes } from '../../../app.routes';
     CommonModule,
     RouterModule,
     SideBarMenuItemComponent,
+    
   ],
   templateUrl: './dashboarLayout.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
