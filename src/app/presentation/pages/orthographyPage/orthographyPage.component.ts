@@ -3,6 +3,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ChatMessageComponent } from '@components/chats-bubbles/chatMessage/chatMessage.component';
 import { MyMessageComponent } from '@components/chats-bubbles/myMessage/myMessage.component';
 import { TextMessageBoxComponent } from '@components/text-boxes/textMessageBox/textMessageBox.component';
+import { TextMessageBoxFileComponent, TextMessageEvent } from '@components/text-boxes/textMessageBoxFile/textMessageBoxFile.component';
 import { TypingLoaderComponent } from '@components/typingLoader/typingLoader.component';
 
 
@@ -15,6 +16,7 @@ import { TypingLoaderComponent } from '@components/typingLoader/typingLoader.com
     MyMessageComponent,
     TypingLoaderComponent,
     TextMessageBoxComponent,
+    TextMessageBoxFileComponent,
   ],
   templateUrl: './orthographyPage.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -23,4 +25,8 @@ export default class OrthographyPageComponent {
   handleMessage(prompt: string) {
     console.log('Received message:', prompt);
   }
- }
+  handleMessageWithFile({ prompt, file }: TextMessageEvent) {
+    console.log('Received message:', prompt);
+    console.log('Received file:', file);
+  }
+}
