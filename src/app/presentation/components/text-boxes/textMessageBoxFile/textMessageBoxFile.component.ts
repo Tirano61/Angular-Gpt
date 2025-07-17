@@ -21,31 +21,30 @@ export interface TextMessageEvent {
 export class TextMessageBoxFileComponent {
 
   @Input() placeHolder: string = '';
-    @Input() desableCorrections: boolean = false;
   
-    @Output() onMessage = new EventEmitter<TextMessageEvent>();
-  
-    public fb = inject(FormBuilder);
-    public messageForm = this.fb.group({
-      prompt: [],
-      file: [null, Validators.required],
-    });
+  @Output() onMessage = new EventEmitter<TextMessageEvent>();
 
-    public file: File | undefined;
+  public fb = inject(FormBuilder);
+  public messageForm = this.fb.group({
+    prompt: [],
+    file: [null, Validators.required],
+  });
 
-    handleSelectedFile(event: any) {
-      const file = event.target.files[0];
-      this.messageForm.controls['file'].setValue(file);
+  public file: File | undefined;
 
-    }
-  
-    handleSubmit() {
-      if (this.messageForm.invalid) return; 
-      const { prompt = '', file } = this.messageForm.value;
+  handleSelectedFile(event: any) {
+    const file = event.target.files[0];
+    this.messageForm.controls['file'].setValue(file);
 
-      this.onMessage.emit({ prompt, file: file! });
-      this.messageForm.reset();
-        
-    }
+  }
+
+  handleSubmit() {
+    if (this.messageForm.invalid) return; 
+    const { prompt = '', file } = this.messageForm.value;
+
+    this.onMessage.emit({ prompt, file: file! });
+    this.messageForm.reset();
+      
+  }
 
 }

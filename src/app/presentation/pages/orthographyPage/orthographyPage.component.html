@@ -2,13 +2,23 @@
 	<div class="chat-messages">
 		<div class="grid gap-y-2">
 			<!-- Chat messages will be rendered here -->
-			<app-chat-message
-				text="Escribe el texto que quieres corregir y te ayudaré a mejorar la ortografía."
-			/>
-			<app-my-message
-				text="Aquí tienes el texto corregido: 'Escribe el texto que quieres corregir y te ayudaré a mejorar la ortografía.'"
-			/>
-			<app-typing-loader />
+
+			@for (message of messages(); track $index) {
+				@if(message.isGpt){
+					<app-chat-message
+						[text]="message.text"
+					/>
+				}@else {
+					<app-my-message
+						[text]="message.text"
+					/>
+				}
+			}
+
+			@if (isLoading()) {
+				<app-typing-loader />
+			}
+		
 		</div>
 	</div>
 	<!-- MessageBox -->
@@ -16,8 +26,13 @@
 			[placeHolder]="'Escribe tu mensaje...'"
 			(onMessage)="handleMessage($event)"
 		/> -->
-		<app-text-message-box-file
+		<!-- <app-text-message-box-file
 			[placeHolder]="'Adjuntar archivo...'"
 			(onMessage)="handleMessageWithFile($event)"
+		/> -->
+		<app-text-message-box-slect
+			[placeHolder]="'Adjuntar archivo...'"
+			[options]="[{id: '1', text: '1'}, {id: '2', text: '2'}]"
+			(onMessage)="handleMessageWithSelect($event)"
 		/>
 </div>
