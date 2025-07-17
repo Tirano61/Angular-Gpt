@@ -12,8 +12,12 @@
 		</div>
 	</div>
 	<!-- MessageBox -->
-	 <app-text-message-box 
-	 	[placeHolder]="'Escribe tu mensaje...'"
-		(onMessage)="handleMessage($event)"
-	 />
+		<!-- <app-text-message-box 
+			[placeHolder]="'Escribe tu mensaje...'"
+			(onMessage)="handleMessage($event)"
+		/> -->
+		<app-text-message-box-file
+			[placeHolder]="'Adjuntar archivo...'"
+			(onMessage)="handleMessageWithFile($event)"
+		/>
 </div>
