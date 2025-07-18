@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { ChatMessageComponent } from '@components/chats-bubbles/chatMessage/chatMessage.component';
 import { MyMessageComponent } from '@components/chats-bubbles/myMessage/myMessage.component';
 import { TextMessageBoxComponent } from '@components/text-boxes/textMessageBox/textMessageBox.component';
@@ -7,6 +7,7 @@ import { TextMessageBoxFileComponent, TextMessageEvent } from '@components/text-
 import { TextMessageBoxSelectEvent, TextMessageBoxSlectComponent } from '@components/text-boxes/textMessageBoxSlect/textMessageBoxSlect.component';
 import { TypingLoaderComponent } from '@components/typingLoader/typingLoader.component';
 import { MessageInterface } from '@interfaces/message.interface';
+import { OpenAiService } from 'app/presentation/services/openai.service';
 
 
 
@@ -28,6 +29,7 @@ import { MessageInterface } from '@interfaces/message.interface';
 export default class OrthographyPageComponent {
   public messages = signal<MessageInterface[]>([{text: 'Hello, how can I help you?', isGpt: true}]);
   public isLoading = signal(false);
+  public openAiService = inject( OpenAiService );
 
   handleMessage(prompt: string) {
     console.log('Received message:', prompt);
