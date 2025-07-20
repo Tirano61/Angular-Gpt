@@ -32,13 +32,21 @@ export default class OrthographyPageComponent {
   public openAiService = inject( OpenAiService );
 
   handleMessage(prompt: string) {
-    console.log('Received message:', prompt);
+    this.isLoading.set(true);
+    this.messages.update( (prev) => [
+      ...prev,
+      {
+        isGpt: false,
+        text: prompt,
+      }
+    ]);
+
+    this.openAiService.checkOrthopraphy(prompt)
+      .subscribe( resp => {
+      this.isLoading.set(false);
+        console.log(resp)
+    });
+  
   }
-  handleMessageWithFile({ prompt, file }: TextMessageEvent) {
-    console.log('Received message:', prompt);
-    console.log('Received file:', file);
-  }
-  handleMessageWithSelect( event: TextMessageBoxSelectEvent ) {
-    console.log('Received message with select', event);
-  }
+  
 }
