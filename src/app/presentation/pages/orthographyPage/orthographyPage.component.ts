@@ -1,10 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { ChatMessageComponent } from '@components/chats-bubbles/chatMessage/chatMessage.component';
+import { GptMessageOrthographyComponent } from '@components/chats-bubbles/gptMessageOrthography/gptMessageOrthography.component';
 import { MyMessageComponent } from '@components/chats-bubbles/myMessage/myMessage.component';
 import { TextMessageBoxComponent } from '@components/text-boxes/textMessageBox/textMessageBox.component';
-import { TextMessageBoxFileComponent, TextMessageEvent } from '@components/text-boxes/textMessageBoxFile/textMessageBoxFile.component';
-import { TextMessageBoxSelectEvent, TextMessageBoxSlectComponent } from '@components/text-boxes/textMessageBoxSlect/textMessageBoxSlect.component';
 import { TypingLoaderComponent } from '@components/typingLoader/typingLoader.component';
 import { MessageInterface } from '@interfaces/message.interface';
 import { OpenAiService } from 'app/presentation/services/openai.service';
@@ -17,17 +16,16 @@ import { OpenAiService } from 'app/presentation/services/openai.service';
   imports: [
     CommonModule,
     ChatMessageComponent,
+    GptMessageOrthographyComponent,
     MyMessageComponent,
     TypingLoaderComponent,
     TextMessageBoxComponent,
-    TextMessageBoxFileComponent,
-    TextMessageBoxSlectComponent,
   ],
   templateUrl: './orthographyPage.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class OrthographyPageComponent {
-  public messages = signal<MessageInterface[]>([{text: 'Hello, how can I help you?', isGpt: true}]);
+  public messages = signal<MessageInterface[]>([]);
   public isLoading = signal(false);
   public openAiService = inject( OpenAiService );
 
@@ -44,7 +42,16 @@ export default class OrthographyPageComponent {
     this.openAiService.checkOrthopraphy(prompt)
       .subscribe( resp => {
       this.isLoading.set(false);
-        console.log(resp)
+        
+        this.messages.update( prev => [
+          ...prev,
+          {
+            isGpt: true,
+            text: resp.message,
+            info: resp,
+          }
+        ]);
+      
     });
   
   }
