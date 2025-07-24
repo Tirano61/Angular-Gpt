@@ -27,7 +27,6 @@ export class TextMessageBoxComponent {
   handleSubmit() {
     if (this.messageForm.invalid) return; 
     const { prompt } = this.messageForm.value;
-    console.log('handleSubmit', prompt);
     this.onMessage.emit(prompt ?? '');
     this.messageForm.reset();
       
