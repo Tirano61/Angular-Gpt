@@ -1,9 +1,7 @@
 import { environment } from 'environments/environment';
-import { prosConsUseCase } from './pros-cons.use-case';
-import { ProsConsResponse } from '@interfaces/pros-cons.response';
 
 
-export async function* prosConsStreamUseCase (prompt: string) {
+export async function* prosConsStreamUseCase (prompt: string, abortSignal: AbortSignal) {
     try {
         const resp = await fetch(`${environment.backendApi}/pros-cons-discusser-stream`,{
             method: 'POST',
@@ -11,6 +9,7 @@ export async function* prosConsStreamUseCase (prompt: string) {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({ prompt }),
+            signal: abortSignal,
         });
     
         if( !resp.ok ) throw new Error('Failed to fetch pros-cons-discusser check');
