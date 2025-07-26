@@ -7,5 +7,7 @@ export interface MessageInterface {
         userScore: number;
         message: string;
         errors: string[];
-    } // Optional property to hold additional information, such as response metadata
+    },
+    audioUrl?: string; // Optional property to hold the URL of the audio file 
+   
 }
