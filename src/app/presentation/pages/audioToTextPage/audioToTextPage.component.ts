@@ -7,6 +7,7 @@ import { TypingLoaderComponent } from '@components/typingLoader/typingLoader.com
 import { MessageInterface } from '@interfaces/message.interface';
 import { OpenAiService } from 'app/presentation/services/openai.service';
 import { TextMessageBoxFileComponent, TextMessageEvent } from "@components/text-boxes/textMessageBoxFile/textMessageBoxFile.component";
+import { AudioToTextResponse } from '@interfaces/audio-to-text.response';
 
 @Component({
   selector: 'app-audio-to-text-page',
@@ -24,13 +25,32 @@ import { TextMessageBoxFileComponent, TextMessageEvent } from "@components/text-
 })
 export default class AudioToTextPageComponent { 
   public messages = signal<MessageInterface[]>([]);
-      public isLoading = signal(false);
-      public openAiService = inject( OpenAiService );
+  public isLoading = signal(false);
+  public openAiService = inject( OpenAiService );
+
+  handleMessageWithFile({ prompt, file }: TextMessageEvent) {
     
-      handleMessageWithFile({ prompt, file }: TextMessageEvent) {
-        console.log('Received message:', prompt);
-        console.log('Received file:', file);
-      }
-      
+    const text = prompt ?? file.name ?? 'Traduce el audio a texto ';
+
+    this.isLoading.set(true);
+
+    this.messages.update( prev => [ ...prev, { isGpt: false, text: text}]);
+
+    this.openAiService.audioToText(file, text).subscribe(resp => this.handleResponse(resp));
+
+  }
+
+  handleResponse(resp: AudioToTextResponse | null) {
+    this.isLoading.set(false);
+    if (!resp) return;
+
+    const text = `## __Transcripción:__ 
+Total-Tokens:  ${resp!.usage.total_tokens}
+## El texto es:
+
+${resp!.text}          
+    `
+    this.messages.update( prev => [ ...prev, { isGpt: true, text: text }]);
+  }
       
 }
