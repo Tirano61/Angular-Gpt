@@ -8,6 +8,9 @@ export interface MessageInterface {
         message: string;
         errors: string[];
     },
-    audioUrl?: string; // Optional property to hold the URL of the audio file 
-   
+    audioUrl?: string;
+    imageInfo?: {
+        url: string;
+        alt: string;
+    }
 }
