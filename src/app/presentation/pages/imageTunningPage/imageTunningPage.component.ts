@@ -27,26 +27,28 @@ import { OpenAiService } from 'app/presentation/services/openai.service';
 export default class ImageTunningPageComponent { 
 
   public messages = signal<MessageInterface[]>([
-    {
+    /* {
       isGpt: true,
       text: 'Dummy Image',
       imageInfo: {
         url: 'http://localhost:3000/gpt/image-generation/1757125575780.png',
         alt: 'Un gato con gafas de sol y una camisa hawaiana, sentado en una playa tropical con palmeras y un mar azul de fondo.',
       }
-    }
+    } */
   ]);
     public isLoading = signal(false);
     public openAiService = inject( OpenAiService );
 
     public originalImage = signal<string | undefined>( undefined );
-  
-    handleMessage(prompt: string) {
+
+    public maskImage = signal<string | undefined>( undefined );
+
+  handleMessage(prompt: string) {
   
     this.isLoading.set(true);
     this.messages.update( (prev) => ([...prev, { isGpt: false, text: prompt }]) );
 
-    this.openAiService.imageGeneration( prompt )
+    this.openAiService.imageGeneration( prompt, this.originalImage(), this.maskImage() )
       .subscribe(resp =>{
         this.isLoading.set(false);
         if( !resp ) return;
@@ -62,7 +64,8 @@ export default class ImageTunningPageComponent {
 
   handleImageChange(newImage: string, originalImage: string){
     this.originalImage.set( originalImage );
-    this.isLoading.set(true);
+    this.maskImage.set( newImage );
+    
     
 
   }
